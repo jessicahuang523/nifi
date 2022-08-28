@@ -55,6 +55,7 @@ import java.util.Map;
 
 import static org.apache.parquet.format.converter.ParquetMetadataConverter.NO_FILTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -230,7 +231,7 @@ public class TestConvertAvroToParquet {
         // Map
         int[] values = {firstRecord.getGroup("mymap",0).getGroup("key_value",0).getInteger("value", 0), firstRecord.getGroup("mymap",0).getGroup("key_value",1).getInteger("value", 0)};
         Arrays.sort(values);
-        assertEquals(Arrays.toString(values), "[1, 2]");
+        assertArrayEquals(values, new int[]{1, 2});
 
         // Fixed
         assertEquals(firstRecord.getString("myfixed",0), "A");
