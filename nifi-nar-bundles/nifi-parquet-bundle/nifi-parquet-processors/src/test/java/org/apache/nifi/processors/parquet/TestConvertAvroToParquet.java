@@ -52,10 +52,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 
 import static org.apache.parquet.format.converter.ParquetMetadataConverter.NO_FILTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -229,9 +229,13 @@ public class TestConvertAvroToParquet {
         assertEquals(firstRecord.getGroup("myarray",0).getGroup("list",1).getInteger("element", 0), 2);
 
         // Map
-        int[] values = {firstRecord.getGroup("mymap",0).getGroup("key_value",0).getInteger("value", 0), firstRecord.getGroup("mymap",0).getGroup("key_value",1).getInteger("value", 0)};
-        Arrays.sort(values);
-        assertArrayEquals(values, new int[]{1, 2});
+        Map mymap = new HashMap();
+        mymap.put(firstRecord.getGroup("mymap",0).getGroup("key_value",0).getString("key", 0), firstRecord.getGroup("mymap",0).getGroup("key_value",0).getInteger("value", 0));
+        mymap.put(firstRecord.getGroup("mymap",0).getGroup("key_value",1).getString("key", 0), firstRecord.getGroup("mymap",0).getGroup("key_value",1).getInteger("value", 0));
+        Map correctMap = new HashMap();
+        correctMap.put("a", 1);
+        correctMap.put("b", 2);
+        assertEquals(mymap, correctMap);
 
         // Fixed
         assertEquals(firstRecord.getString("myfixed",0), "A");
